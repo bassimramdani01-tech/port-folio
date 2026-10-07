@@ -1,0 +1,151 @@
+---
+interface Props {
+  endpoint: string;
+  email: string;
+  copy: {
+    nameLabel: string;
+    emailLabel: string;
+    messageLabel: string;
+    submit: string;
+    submitting: string;
+    success: string;
+    failure: string;
+    nameRequired: string;
+    emailRequired: string;
+    emailInvalid: string;
+    messageRequired: string;
+    honeypotLabel: string;
+  };
+  emailLabel: string;
+}
+
+const { endpoint, email, copy, emailLabel } = Astro.props;
+---
+
+<form
+  class="contact-form record-card"
+  action={endpoint}
+  method="post"
+  novalidate
+  data-contact-form
+  data-endpoint={endpoint}
+  data-success={copy.success}
+  data-failure={copy.failure}
+  data-name-required={copy.nameRequired}
+  data-email-required={copy.emailRequired}
+  data-email-invalid={copy.emailInvalid}
+  data-message-required={copy.messageRequired}
+  data-submitting={copy.submitting}
+  data-submit-label={copy.submit}
+>
+  <div class="form-field">
+    <label for="contact-name">{copy.nameLabel}</label>
+    <input id="contact-name" name="name" type="text" autocomplete="name" required aria-describedby="contact-name-error" />
+    <span class="field-error" id="contact-name-error" data-error-for="name" hidden></span>
+  </div>
+  <div class="form-field">
+    <label for="contact-email">{copy.emailLabel}</label>
+    <input id="contact-email" name="email" type="email" autocomplete="email" required aria-describedby="contact-email-error" />
+    <span class="field-error" id="contact-email-error" data-error-for="email" hidden></span>
+  </div>
+  <div class="form-field">
+    <label for="contact-message">{copy.messageLabel}</label>
+    <textarea id="contact-message" name="message" rows="6" required aria-describedby="contact-message-error"></textarea>
+    <span class="field-error" id="contact-message-error" data-error-for="message" hidden></span>
+  </div>
+  <div class="honeypot" aria-hidden="true">
+    <label for="contact-website">{copy.honeypotLabel}</label>
+    <input id="contact-website" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+  <button class="button button-primary" type="submit" data-submit-button>{copy.submit}</button>
+  <a class="button button-secondary" href={`mailto:${email}`} data-email-fallback hidden>{emailLabel}</a>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+
+  if (form) {
+    const submitButton = form.querySelector<HTMLButtonElement>('[data-submit-button]');
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    const emailFallback = form.querySelector<HTMLAnchorElement>('[data-email-fallback]');
+
+    const showError = (field: 'name' | 'email' | 'message', message: string) => {
+      const input = form.elements.namedItem(field) as HTMLInputElement | HTMLTextAreaElement | null;
+      const error = form.querySelector<HTMLElement>(`[data-error-for="${field}"]`);
+      if (!input || !error) return;
+      input.setAttribute('aria-invalid', 'true');
+      error.textContent = message;
+      error.hidden = false;
+    };
+
+    const clearError = (field: 'name' | 'email' | 'message') => {
+      const input = form.elements.namedItem(field) as HTMLInputElement | HTMLTextAreaElement | null;
+      const error = form.querySelector<HTMLElement>(`[data-error-for="${field}"]`);
+      input?.removeAttribute('aria-invalid');
+      if (error) {
+        error.textContent = '';
+        error.hidden = true;
+      }
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      status?.replaceChildren();
+      if (emailFallback) emailFallback.hidden = true;
+
+      const name = form.elements.namedItem('name') as HTMLInputElement;
+      const email = form.elements.namedItem('email') as HTMLInputElement;
+      const message = form.elements.namedItem('message') as HTMLTextAreaElement;
+      const trap = form.elements.namedItem('_gotcha') as HTMLInputElement;
+      const fields = [name, email, message] as const;
+      fields.forEach((field) => clearError(field.name as 'name' | 'email' | 'message'));
+
+      if (trap?.value) return;
+
+      const invalid: HTMLElement[] = [];
+      if (!name.value.trim()) {
+        showError('name', form.dataset.nameRequired ?? '');
+        invalid.push(name);
+      }
+      if (!email.value.trim()) {
+        showError('email', form.dataset.emailRequired ?? '');
+        invalid.push(email);
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        showError('email', form.dataset.emailInvalid ?? '');
+        invalid.push(email);
+      }
+      if (!message.value.trim()) {
+        showError('message', form.dataset.messageRequired ?? '');
+        invalid.push(message);
+      }
+      if (invalid.length) {
+        invalid[0].focus();
+        return;
+      }
+
+      if (!submitButton) return;
+      submitButton.disabled = true;
+      submitButton.textContent = form.dataset.submitting ?? '';
+      form.setAttribute('aria-busy', 'true');
+
+      try {
+        const response = await fetch(form.dataset.endpoint ?? '', {
+          method: 'POST',
+          headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form).entries())),
+        });
+        if (!response.ok) throw new Error('Contact endpoint returned an error.');
+        if (status) status.textContent = form.dataset.success ?? '';
+        form.reset();
+      } catch {
+        if (status) status.textContent = form.dataset.failure ?? '';
+        if (emailFallback) emailFallback.hidden = false;
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = form.dataset.submitLabel ?? '';
+        form.removeAttribute('aria-busy');
+      }
+    });
+  }
+</script>

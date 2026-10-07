@@ -1,0 +1,28 @@
+---
+import type { LocalePath } from '../content/types';
+import { url } from '../utils/url';
+
+interface Props {
+  locale: LocalePath;
+  label: string;
+  names: Record<LocalePath, string>;
+}
+
+const { locale, label, names } = Astro.props;
+const locales: LocalePath[] = ['en', 'fr', 'zh'];
+---
+
+<nav class="language-switcher" aria-label={label}>
+  {locales.map((code) => (
+    <a
+      href={url(`${code}/#top`)}
+      lang={code === 'zh' ? 'zh-Hans' : code}
+      aria-current={locale === code ? 'true' : undefined}
+      data-locale-link
+      data-locale-root={url(`${code}/`)}
+      class:list={{ 'language-link': true, 'is-active': locale === code }}
+    >
+      {names[code]}
+    </a>
+  ))}
+</nav>

@@ -1,0 +1,34 @@
+---
+import { isSet } from '../content/utils';
+import { url } from '../utils/url';
+
+interface Props {
+  label: string;
+  links: { label: string; href: string }[];
+  wechatLabel?: string;
+  wechatId?: string;
+  wechatQrLabel?: string;
+  wechatQrUrl?: string;
+  externalLabel: string;
+}
+
+const { label, links, wechatLabel, wechatId, wechatQrLabel, wechatQrUrl, externalLabel } = Astro.props;
+const safeLinks = links.filter(({ href }) => /^https:\/\//i.test(href));
+const showWechatId = Boolean(wechatLabel && isSet(wechatId));
+---
+
+{(safeLinks.length > 0 || showWechatId || wechatQrUrl) && (
+  <nav class="social-links" aria-label={label}>
+    {safeLinks.map((link) => (
+      <a href={link.href} target="_blank" rel="noopener noreferrer">
+        {link.label}<span class="visually-hidden"> ({externalLabel})</span>
+      </a>
+    ))}
+    {showWechatId && <span>{wechatLabel}: {wechatId}</span>}
+    {wechatQrUrl && (
+      <a class="wechat-qr-link" href={url(wechatQrUrl)}>
+        <img src={url(wechatQrUrl)} alt={wechatQrLabel ?? ''} loading="lazy" decoding="async" />
+      </a>
+    )}
+  </nav>
+)}

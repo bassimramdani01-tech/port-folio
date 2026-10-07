@@ -1,0 +1,24 @@
+:root {
+  --color-bg: #0a0f1a;
+  --color-surface: #101827;
+  --color-surface-alt: #16202f;
+  --color-border: #223047;
+  --color-text: #e8edf5;
+  --color-text-muted: #9aa8bf;
+  --color-accent: #2dd4bf;
+  --color-accent-hover: #5eead4;
+
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 2.75rem;
+
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+}

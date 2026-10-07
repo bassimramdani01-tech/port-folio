@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../content/site';
+import { getTranslations } from '../i18n/utils';
+import { url } from '../utils/url';
+
+const t = getTranslations('en');
+---
+
+<BaseLayout
+  locale="en"
+  lang="en"
+  title={`${t.notFound.title} | ${site.name}`}
+  siteName={site.name}
+  description={t.notFound.message}
+  indexable={false}
+>
+  <main id="main-content" class="page-shell not-found-page">
+    <p class="eyebrow">404</p>
+    <h1>{t.notFound.title}</h1>
+    <p>{t.notFound.message}</p>
+    <a class="button button-primary" href={url('en/')}>{t.notFound.homeLink}</a>
+  </main>
+</BaseLayout>

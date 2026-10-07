@@ -1,0 +1,25 @@
+---
+import Card from './Card.astro';
+
+interface Props {
+  explanation: string;
+  email: string;
+  emailLabel: string;
+  phone?: { display: string; href: string; note: string };
+}
+
+const { explanation, email, emailLabel, phone } = Astro.props;
+---
+
+<Card class="contact-card">
+  <p>{explanation}</p>
+  <div class="contact-actions">
+    <a class="button button-primary" href={`mailto:${email}`}>{emailLabel}</a>
+    {phone && (
+      <div class="phone-action">
+        <a class="button button-secondary" href={`tel:${phone.href}`}>{phone.display}</a>
+        <small class="muted-note">{phone.note}</small>
+      </div>
+    )}
+  </div>
+</Card>

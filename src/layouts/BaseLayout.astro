@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import '../styles/site.css';
+import type { LocalePath } from '../content/types';
+import { getTranslations, htmlLangByLocale } from '../i18n/utils';
+import { url } from '../utils/url';
+
+interface Props {
+  locale: LocalePath;
+  lang: 'en' | 'fr' | 'zh-Hans';
+  title: string;
+  siteName: string;
+  description?: string;
+  indexable?: boolean;
+}
+
+const { locale, lang, title, siteName, description, indexable = true } = Astro.props;
+const t = getTranslations(locale);
+const localeCodes: LocalePath[] = ['en', 'fr', 'zh'];
+const canonicalUrl = indexable && Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const alternateLocales = indexable && Astro.site
+  ? localeCodes.map((code) => ({
+      code,
+      lang: htmlLangByLocale[code],
+      url: new URL(url(`${code}/`), Astro.site!).href,
+      openGraphLocale: getTranslations(code).meta.openGraphLocale,
+    }))
+  : [];
+const defaultLocaleUrl = alternateLocales.find((item) => item.code === 'en')?.url;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    {description && <meta name="description" content={description} />}
+    {!indexable && <meta name="robots" content="noindex,follow" />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {alternateLocales.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.lang} href={alternate.url} />
+    ))}
+    {defaultLocaleUrl && <link rel="alternate" hreflang="x-default" href={defaultLocaleUrl} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:locale" content={t.meta.openGraphLocale} />
+    {alternateLocales
+      .filter((alternate) => alternate.code !== locale)
+      .map((alternate) => <meta property="og:locale:alternate" content={alternate.openGraphLocale} />)}
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

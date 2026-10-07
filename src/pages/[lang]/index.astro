@@ -1,0 +1,397 @@
+---
+import { statSync } from 'node:fs';
+import path from 'node:path';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/Card.astro';
+import ContactFallback from '../../components/ContactFallback.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
+import { certificates } from '../../content/certificates';
+import { education } from '../../content/education';
+import { experience } from '../../content/experience';
+import { interests, skills } from '../../content/skills';
+import { site } from '../../content/site';
+import { isSet } from '../../content/utils';
+import type { LocalePath } from '../../content/types';
+import type { LanguageRecord } from '../../content/languages';
+import type { ProjectEntry } from '../../content/projects';
+import { languages } from '../../content/languages';
+import { projects } from '../../content/projects';
+import { formatMessage, getTranslations, htmlLangByLocale } from '../../i18n/utils';
+import { url } from '../../utils/url';
+
+export function getStaticPaths() {
+  return (['en', 'fr', 'zh'] as const).map((locale) => ({
+    params: { lang: locale },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: LocalePath };
+const t = getTranslations(locale);
+const htmlLang = htmlLangByLocale[locale];
+const localeNames = t.languageSwitcher.names as Record<LocalePath, string>;
+const experienceDescriptions = t.experience.descriptions as Record<string, string>;
+const projectDescriptions = t.researchProjects.descriptions as Record<string, string>;
+const interestNames = t.skillsInterests.interestNames as Record<string, string>;
+const languageNames = t.languages.names as Record<string, string>;
+const languageNotes = t.languages.notes as Record<string, string>;
+const certificateRecords = certificates.filter((record) =>
+  record.published && isSet(record.id) && isSet(record.title) && isSet(record.issuer),
+);
+const experienceRecords = experience.filter((record) =>
+  isSet(record.organization) && isSet(record.startDate) && isSet(record.endDate) &&
+  isSet(experienceDescriptions[record.id]),
+);
+const projectRecords = (projects as readonly ProjectEntry[]).filter((record) => {
+  const description = projectDescriptions[record.id];
+  if (record.kind === 'capstone') return isSet(record.description) && isSet(description);
+  return record.published && isSet(record.id) && isSet(record.title) &&
+    isSet(record.description) && isSet(description);
+});
+
+const safeAssetUrl = (candidate: string | undefined, allowedExtensions?: readonly string[]): string | undefined => {
+  if (!candidate || !isSet(candidate)) return undefined;
+  const relative = candidate.replace(/^public[\\/]/i, '').replace(/^[/\\]+/, '');
+  if (relative.split(/[\\/]/).includes('..')) return undefined;
+  const publicRoot = path.resolve(process.cwd(), 'public');
+  const absolute = path.resolve(publicRoot, relative);
+  if (!absolute.startsWith(`${publicRoot}${path.sep}`)) return undefined;
+  try {
+    if (!statSync(absolute).isFile()) return undefined;
+  } catch {
+    return undefined;
+  }
+  if (allowedExtensions && !allowedExtensions.includes(path.extname(absolute).toLowerCase())) return undefined;
+  return relative.replaceAll('\\', '/');
+};
+
+const cvCandidate = (site.cv.localeOverrides as Partial<Record<LocalePath, string>>)[locale] || site.cv.path;
+const cvPath = safeAssetUrl(
+  isSet(cvCandidate) ? cvCandidate : site.cv.defaultPath,
+  ['.pdf'],
+);
+const qrPath = safeAssetUrl(site.contact.wechat.qrAsset, ['.svg', '.png', '.jpg', '.jpeg', '.webp', '.gif']);
+const email = isSet(site.contact.email) ? site.contact.email : undefined;
+const phoneIsSafe = isSet(site.contact.phone.display) && isSet(site.contact.phone.href) &&
+  /^\+?[\d\s()-]+$/.test(site.contact.phone.display) && /^\+?\d+$/.test(site.contact.phone.href);
+const phone = phoneIsSafe
+  ? { display: site.contact.phone.display, href: site.contact.phone.href, verified: site.contact.phone.verified }
+  : undefined;
+const formEndpoint = isSet(site.formEndpoint) && /^https:\/\//i.test(site.formEndpoint)
+  ? site.formEndpoint
+  : undefined;
+const visibleSkills = skills.filter((item) => isSet(item.name));
+const visibleInterests = interests.filter((item) => isSet(interestNames[item.id]));
+const visibleLanguages = (languages as readonly LanguageRecord[]).filter((item) =>
+  isSet(languageNames[item.id]) && (isSet(item.level) || isSet(languageNotes[item.id])),
+);
+
+const educationDetails: { label: string; value: string; toConfirm?: boolean }[] = [];
+if (isSet(education.institution.value)) {
+  educationDetails.push({ label: t.education.labels.institution, value: education.institution.value });
+}
+if (isSet(education.location.value)) {
+  educationDetails.push({
+    label: t.education.labels.location,
+    value: t.education.locationValue,
+    toConfirm: !education.location.verified,
+  });
+}
+const durationMatch = education.program.value.match(/^([a-z]+)-year/i);
+const durationYears: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5 };
+if (education.program.verified && durationMatch && durationYears[durationMatch[1].toLowerCase()]) {
+  educationDetails.push({
+    label: t.education.labels.program,
+    value: formatMessage(t.education.programDuration, {
+      years: durationYears[durationMatch[1].toLowerCase()],
+    }),
+  });
+}
+if (education.field.verified && isSet(education.field.value)) {
+  educationDetails.push({ label: t.education.labels.field, value: t.hero.field });
+}
+if (
+  education.officialDegreeTitle.verified &&
+  education.officialDegreeTitle.published !== false &&
+  isSet(education.officialDegreeTitle.value)
+) {
+  educationDetails.push({
+    label: t.education.labels.officialDegreeTitle,
+    value: education.officialDegreeTitle.value,
+  });
+}
+const completionYear = education.completion.value.match(/\d{4}\/\d{4}/)?.[0];
+if (education.completion.verified && completionYear) {
+  educationDetails.push({
+    label: t.education.labels.completion,
+    value: formatMessage(t.education.completionValue, { year: completionYear }),
+  });
+}
+const gradeNumber = education.overallGrade.value.match(/[\d.]+(?=\/20)/)?.[0];
+if (site.flags.showGrade && education.overallGrade.verified && gradeNumber) {
+  educationDetails.push({
+    label: t.education.labels.overallGrade,
+    value: formatMessage(t.education.gradeValue, {
+      value: new Intl.NumberFormat(htmlLang, { maximumFractionDigits: 1 }).format(Number(gradeNumber)),
+    }),
+  });
+}
+const ranking = education.finalProjectRanking.value.match(/(\d+)\s+of\s+(\d+)/i);
+if (education.finalProjectRanking.verified && ranking) {
+  educationDetails.push({
+    label: t.education.labels.finalProjectRanking,
+    value: formatMessage(t.education.finalProjectRankingValue, {
+      rank: Number(ranking[1]),
+      total: Number(ranking[2]),
+    }),
+  });
+}
+
+const visibleSections = [
+  { id: 'about', label: t.navigation.about },
+  ...(educationDetails.length ? [{ id: 'education', label: t.navigation.education }] : []),
+  ...(experienceRecords.length ? [{ id: 'internships', label: t.navigation.internships }] : []),
+  ...(projectRecords.length ? [{ id: 'research-projects', label: t.navigation.researchProjects }] : []),
+  ...(visibleSkills.length || visibleInterests.length
+    ? [{ id: 'skills-interests', label: t.navigation.skillsInterests }]
+    : []),
+  ...(certificateRecords.length ? [{ id: 'certificates', label: t.navigation.certificates }] : []),
+  ...(visibleLanguages.length ? [{ id: 'languages', label: t.navigation.languages }] : []),
+  ...(email ? [{ id: 'contact', label: t.navigation.contact }] : []),
+];
+
+const formatDate = (value: string) => {
+  const date = new Date(`${value}T00:00:00Z`);
+  return new Intl.DateTimeFormat(htmlLang, { dateStyle: 'medium', timeZone: 'UTC' }).format(date);
+};
+const languageYear = languages.find((item) => item.id === 'chinese')?.note?.match(/\d{4}\/\d{4}/)?.[0];
+const year = new Date().getUTCFullYear();
+const showFirstCohortClaim = education.firstCohortClaim.verified &&
+  Boolean(education.firstCohortClaim.published) && isSet(education.firstCohortClaim.value);
+---
+
+<BaseLayout
+  locale={locale}
+  lang={htmlLang}
+  title={t.meta.title}
+  siteName={site.name}
+  description={t.meta.description}
+>
+  <SiteHeader
+    locale={locale}
+    homeLabel={t.header.homeLink}
+    skipLabel={t.accessibility.skipToContent}
+    navLabel={t.accessibility.primaryNavigation}
+    menuLabel={t.header.openMenu}
+    closeMenuLabel={t.header.closeMenu}
+    languageLabel={t.languageSwitcher.label}
+    languageNames={localeNames}
+    name={site.name}
+    sections={visibleSections}
+  />
+
+  <main id="main-content" class="page-shell">
+    <section class="hero-section" id="top" aria-labelledby="page-title">
+      <p class="eyebrow">{t.hero.eyebrow}</p>
+      <h1 id="page-title">{site.name}</h1>
+      <p class="hero-field">{t.hero.field}</p>
+      <div class="goal-panel">
+        <p class="goal-label">{t.hero.goalLabel}</p>
+        <p>{t.hero.goal}</p>
+      </div>
+      <div class="hero-actions">
+        <a class="button button-primary" href="#contact">{t.hero.contactAction}</a>
+        {cvPath && <a class="button button-secondary" href={url(cvPath)} download>{t.hero.cvAction}</a>}
+      </div>
+    </section>
+
+    <section class="content-section" id="about" aria-labelledby="about-heading">
+      <SectionHeading id="about-heading" title={t.about.title} />
+      <div class="about-copy">
+        <p>{t.about.paragraphs.background}</p>
+        <p>{t.about.paragraphs.experience}</p>
+        <p>{t.about.paragraphs.researchDirection}</p>
+      </div>
+    </section>
+
+    {educationDetails.length > 0 && (
+      <section class="content-section" id="education" aria-labelledby="education-heading">
+        <SectionHeading id="education-heading" title={t.education.title} />
+        <Card class="education-card">
+          <dl class="fact-list">
+            {educationDetails.map((detail) => (
+              <div class="fact-row">
+                <dt>{detail.label}</dt>
+                <dd>
+                  {detail.value}
+                  {detail.toConfirm && <small class="muted-note">{t.education.labels.toConfirm}</small>}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          {showFirstCohortClaim && (
+            <p class="verified-claim">{t.education.firstCohortClaim}</p>
+          )}
+        </Card>
+      </section>
+    )}
+
+    {experienceRecords.length > 0 && (
+      <section class="content-section" id="internships" aria-labelledby="internships-heading">
+        <SectionHeading id="internships-heading" title={t.experience.title} />
+        <div class="card-grid">
+          {experienceRecords.map((record) => (
+            <Card class="experience-card">
+              <p class="card-kicker">{t.experience.recordLabel}</p>
+              <h3>{record.organization}</h3>
+              <p class="date-range">
+                <time datetime={record.startDate}>{formatDate(record.startDate)}</time>
+                <span aria-hidden="true"> – </span>
+                <time datetime={record.endDate}>{formatDate(record.endDate)}</time>
+              </p>
+              <p>{experienceDescriptions[record.id]}</p>
+            </Card>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {projectRecords.length > 0 && (
+      <section class="content-section" id="research-projects" aria-labelledby="projects-heading">
+        <SectionHeading id="projects-heading" title={t.researchProjects.title} />
+        <div class="card-grid">
+          {projectRecords.map((record) => (
+            <Card class="project-card">
+              <p class="card-kicker">
+                {record.kind === 'capstone' ? t.researchProjects.capstoneLabel : t.researchProjects.priorAcademicWork}
+              </p>
+              <h3>{record.kind === 'capstone' ? t.researchProjects.capstoneLabel : record.title}</h3>
+              <p>{projectDescriptions[record.id]}</p>
+              {record.kind === 'capstone' && isSet(record.context) && (
+                <p class="muted-note">{t.researchProjects.priorAcademicWork}</p>
+              )}
+              {record.kind === 'project' && record.links?.some((link) => isSet(link.label) && /^https:\/\//i.test(link.href)) && (
+                <ul class="inline-link-list">
+                  {record.links.filter((link) => isSet(link.label) && /^https:\/\//i.test(link.href)).map((link) => (
+                    <li><a href={link.href} target="_blank" rel="noopener noreferrer">{t.researchProjects.projectLink}</a></li>
+                  ))}
+                </ul>
+              )}
+            </Card>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {(visibleSkills.length > 0 || visibleInterests.length > 0) && (
+      <section class="content-section" id="skills-interests" aria-labelledby="skills-heading">
+        <SectionHeading id="skills-heading" title={t.skillsInterests.title} />
+        <div class="two-column-grid">
+          {visibleSkills.length > 0 && (
+            <Card class="list-card">
+              <h3>{t.skillsInterests.skillsLabel}</h3>
+              <ul class="chip-list">
+                {visibleSkills.map((item) => <li>{item.name}</li>)}
+              </ul>
+            </Card>
+          )}
+          {visibleInterests.length > 0 && (
+            <Card class="list-card">
+              <h3>{t.skillsInterests.interestsLabel}</h3>
+              <ul class="chip-list">
+                {visibleInterests.map((item) => <li>{interestNames[item.id]}</li>)}
+              </ul>
+            </Card>
+          )}
+        </div>
+      </section>
+    )}
+
+    {certificateRecords.length > 0 && (
+      <section class="content-section" id="certificates" aria-labelledby="certificates-heading">
+        <SectionHeading id="certificates-heading" title={t.certificates.title} />
+        <div class="card-grid">
+          {certificateRecords.map((record) => (
+            <Card class="certificate-card">
+              <h3>{record.title}</h3>
+              <p><strong>{t.certificates.issuerLabel}:</strong> {record.issuer}</p>
+              {record.issuedOn && <p><strong>{t.certificates.dateLabel}:</strong> {record.issuedOn}</p>}
+              {record.url && /^https:\/\//i.test(record.url) && (
+                <a href={record.url} target="_blank" rel="noopener noreferrer">{t.certificates.certificateLink}</a>
+              )}
+            </Card>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {visibleLanguages.length > 0 && (
+      <section class="content-section" id="languages" aria-labelledby="languages-heading">
+        <SectionHeading id="languages-heading" title={t.languages.title} />
+        <div class="language-grid">
+          {visibleLanguages.map((language) => {
+            const note = languageNotes[language.id];
+            const localizedNote = language.id === 'chinese' && languageYear && note
+              ? formatMessage(note, { year: languageYear })
+              : note;
+            return (
+              <Card class="language-card">
+                <h3>{languageNames[language.id]}</h3>
+                {isSet(language.level) && <p class="language-level">{language.level}</p>}
+                {localizedNote && <p>{localizedNote}</p>}
+              </Card>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    {email && (
+      <section class="content-section" id="contact" aria-labelledby="contact-heading">
+        <SectionHeading id="contact-heading" title={t.contact.title} />
+        <p class="section-intro">{t.contact.introduction}</p>
+        {formEndpoint ? (
+          <ContactForm
+            endpoint={formEndpoint}
+            email={email}
+            copy={t.contact.form}
+            emailLabel={t.contact.emailLabel}
+          />
+        ) : (
+          <ContactFallback
+            explanation={t.contact.fallbackExplanation}
+            email={email}
+            emailLabel={t.contact.emailLabel}
+            phone={phone ? {
+              display: phone.display,
+              href: phone.href,
+              note: phone.verified ? '' : t.contact.phoneToConfirm,
+            } : undefined}
+          />
+        )}
+        <SocialLinks
+          label={t.socialLinks.label}
+          links={[
+            { label: t.socialLinks.github, href: site.socials.github },
+            { label: t.socialLinks.linkedin, href: site.socials.linkedin },
+          ]}
+          wechatLabel={t.socialLinks.wechat}
+          wechatId={site.contact.wechat.id}
+          wechatQrLabel={t.socialLinks.wechatQr}
+          wechatQrUrl={qrPath}
+          externalLabel={t.accessibility.externalLink}
+        />
+      </section>
+    )}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>{formatMessage(t.footer.copyright, { year })}</p>
+      <a href="#top">{t.footer.backToTop}</a>
+    </div>
+  </footer>
+</BaseLayout>

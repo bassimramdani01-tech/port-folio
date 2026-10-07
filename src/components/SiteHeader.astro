@@ -1,0 +1,158 @@
+---
+import type { LocalePath } from '../content/types';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { url } from '../utils/url';
+
+interface Props {
+  locale: LocalePath;
+  homeLabel: string;
+  skipLabel: string;
+  navLabel: string;
+  menuLabel: string;
+  closeMenuLabel: string;
+  languageLabel: string;
+  languageNames: Record<LocalePath, string>;
+  name: string;
+  sections: { id: string; label: string }[];
+}
+
+const {
+  locale, homeLabel, skipLabel, navLabel, menuLabel, closeMenuLabel,
+  languageLabel, languageNames, name, sections,
+} = Astro.props;
+---
+
+<a class="skip-link" href="#main-content">{skipLabel}</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="site-brand" href={url(`${locale}/`)} aria-label={homeLabel}>
+      <span class="brand-mark" aria-hidden="true">BR</span>
+      <span>{name}</span>
+    </a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      aria-label={menuLabel}
+      data-menu-toggle
+      data-open-label={menuLabel}
+      data-close-label={closeMenuLabel}
+      hidden
+    >
+      <span aria-hidden="true">☰</span>
+    </button>
+    <nav class="primary-navigation" id="primary-navigation" aria-label={navLabel} data-primary-navigation>
+      {sections.map((section) => <a href={`#${section.id}`}>{section.label}</a>)}
+    </nav>
+    <LanguageSwitcher locale={locale} label={languageLabel} names={languageNames} />
+  </div>
+</header>
+
+<script>
+  const menuButton = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const navigation = document.querySelector<HTMLElement>('[data-primary-navigation]');
+
+  if (menuButton && navigation) {
+    const narrowScreen = window.matchMedia('(max-width: 52rem)');
+    const menuIcon = menuButton.querySelector<HTMLElement>('[aria-hidden="true"]');
+    const sectionLinks = Array.from(navigation.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
+    const sectionIds = sectionLinks.map((link) => link.hash.slice(1));
+    const sections = [
+      document.getElementById('top'),
+      ...sectionIds.map((id) => document.getElementById(id)),
+    ].filter((section): section is HTMLElement => section instanceof HTMLElement);
+    const localeLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-locale-link]'));
+
+    const setCurrentSection = (sectionId: string) => {
+      const safeSectionId = sectionId === 'top' || sectionIds.includes(sectionId)
+        ? sectionId
+        : 'top';
+      for (const link of sectionLinks) {
+        if (link.hash.slice(1) === safeSectionId) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      }
+      for (const link of localeLinks) {
+        const root = link.dataset.localeRoot;
+        if (root) link.href = `${root}#${encodeURIComponent(safeSectionId)}`;
+      }
+    };
+
+    const setMenuState = (open: boolean) => {
+      if (narrowScreen.matches) navigation.hidden = !open;
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.setAttribute(
+        'aria-label',
+        open ? menuButton.dataset.closeLabel ?? '' : menuButton.dataset.openLabel ?? '',
+      );
+      if (menuIcon) menuIcon.textContent = open ? '×' : '☰';
+      navigation.dataset.open = String(open);
+    };
+
+    const syncMenu = () => {
+      document.documentElement.dataset.menuEnhanced = 'true';
+      menuButton.hidden = !narrowScreen.matches;
+      navigation.hidden = narrowScreen.matches;
+      setMenuState(false);
+    };
+
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') !== 'true';
+      setMenuState(open);
+    });
+    navigation.addEventListener('click', (event) => {
+      const anchor = (event.target as HTMLElement).closest<HTMLAnchorElement>('a');
+      if (!anchor) return;
+
+      const targetId = anchor.hash.slice(1);
+      const target = targetId ? document.getElementById(targetId) : null;
+      if (!target) return;
+
+      event.preventDefault();
+      setMenuState(false);
+      history.pushState(null, '', `#${encodeURIComponent(targetId)}`);
+      setCurrentSection(targetId);
+      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+
+      const heading = target.querySelector<HTMLElement>('h1, h2');
+      heading?.focus({ preventScroll: true });
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
+        setMenuState(false);
+        menuButton.focus();
+      }
+    });
+    narrowScreen.addEventListener('change', syncMenu);
+    syncMenu();
+
+    const updateCurrentSection = () => {
+      const threshold = Math.min(240, Math.round(window.innerHeight * 0.28));
+      let currentSection = sections[0];
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= threshold) currentSection = section;
+        else break;
+      }
+      if (currentSection) setCurrentSection(currentSection.id);
+    };
+
+    let scrollUpdateScheduled = false;
+    window.addEventListener('scroll', () => {
+      if (scrollUpdateScheduled) return;
+      scrollUpdateScheduled = true;
+      window.requestAnimationFrame(() => {
+        updateCurrentSection();
+        scrollUpdateScheduled = false;
+      });
+    }, { passive: true });
+    window.addEventListener('popstate', updateCurrentSection);
+    window.addEventListener('resize', updateCurrentSection);
+
+    const initialSection = window.location.hash.slice(1);
+    if (initialSection && sections.some((section) => section.id === initialSection)) {
+      setCurrentSection(initialSection);
+    } else {
+      updateCurrentSection();
+    }
+  }
+</script>
