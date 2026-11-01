@@ -16,19 +16,9 @@ export const experience = [
   },
   {
     id: 'taqa-2025',
-    organization: 'TAQA',
+    organization: 'TAQA Morocco',
     startDate: '2025-04-01',
     endDate: '2025-05-14',
     work: 'Cleaned databases using SQL and created visualizations with Power BI.',
   },
-  {
-    id: 'argana-artisan-cooperative-2026',
-    organization: 'Argana Artisan Cooperative, Essaouira',
-    startDate: '2026-04-15',
-    endDate: '2026-06-01',
-    work: 'Frontend and backend development for an official website.',
-  },
 ] as const satisfies readonly ExperienceRecord[];
-
-export const pendingExperienceDetails =
-  '[ADD_INTERNSHIP_TITLES_AND_VERIFIED_OUTCOMES]';

@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-03-19T19:00:00.000Z",
+  "title": "Design System: Bassim Ramdani Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Warm Atlas Paper", "canonical": "#f3ede1", "tonalRamp": ["oklch(15% 0.025 80)", "oklch(25% 0.025 80)", "oklch(35% 0.025 80)", "oklch(45% 0.025 80)", "oklch(55% 0.025 80)", "oklch(65% 0.025 80)", "oklch(75% 0.025 80)", "oklch(95% 0.025 80)"] },
+      "paper-surface": { "role": "neutral", "displayName": "Plaster Surface", "canonical": "#fbf7ef", "tonalRamp": ["oklch(15% 0.02 80)", "oklch(25% 0.02 80)", "oklch(35% 0.02 80)", "oklch(45% 0.02 80)", "oklch(55% 0.02 80)", "oklch(65% 0.02 80)", "oklch(75% 0.02 80)", "oklch(95% 0.02 80)"] },
+      "sand": { "role": "neutral", "displayName": "Sanded Paper", "canonical": "#e7dcc8", "tonalRamp": ["oklch(15% 0.035 80)", "oklch(25% 0.035 80)", "oklch(35% 0.035 80)", "oklch(45% 0.035 80)", "oklch(55% 0.035 80)", "oklch(65% 0.035 80)", "oklch(75% 0.035 80)", "oklch(95% 0.035 80)"] },
+      "paper-border": { "role": "neutral", "displayName": "Paper Edge", "canonical": "#b6a88f", "tonalRamp": ["oklch(15% 0.035 80)", "oklch(25% 0.035 80)", "oklch(35% 0.035 80)", "oklch(45% 0.035 80)", "oklch(55% 0.035 80)", "oklch(65% 0.035 80)", "oklch(75% 0.035 80)", "oklch(95% 0.035 80)"] },
+      "text-ink": { "role": "neutral", "displayName": "Indigo Ink", "canonical": "#292642", "tonalRamp": ["oklch(15% 0.035 285)", "oklch(25% 0.035 285)", "oklch(35% 0.035 285)", "oklch(45% 0.035 285)", "oklch(55% 0.035 285)", "oklch(65% 0.035 285)", "oklch(75% 0.035 285)", "oklch(95% 0.035 285)"] },
+      "muted-ink": { "role": "neutral", "displayName": "Soft Indigo Ink", "canonical": "#57546a", "tonalRamp": ["oklch(15% 0.025 285)", "oklch(25% 0.025 285)", "oklch(35% 0.025 285)", "oklch(45% 0.025 285)", "oklch(55% 0.025 285)", "oklch(65% 0.025 285)", "oklch(75% 0.025 285)", "oklch(95% 0.025 285)"] },
+      "indigo": { "role": "primary", "displayName": "Moroccan Indigo", "canonical": "#373260", "tonalRamp": ["oklch(15% 0.075 285)", "oklch(25% 0.075 285)", "oklch(35% 0.075 285)", "oklch(45% 0.075 285)", "oklch(55% 0.075 285)", "oklch(65% 0.075 285)", "oklch(75% 0.075 285)", "oklch(95% 0.075 285)"] },
+      "terracotta": { "role": "secondary", "displayName": "Kiln Terracotta", "canonical": "#97462f", "tonalRamp": ["oklch(15% 0.12 35)", "oklch(25% 0.12 35)", "oklch(35% 0.12 35)", "oklch(45% 0.12 35)", "oklch(55% 0.12 35)", "oklch(65% 0.12 35)", "oklch(75% 0.12 35)", "oklch(95% 0.12 35)"] },
+      "gold": { "role": "tertiary", "displayName": "Old Gold", "canonical": "#765915", "tonalRamp": ["oklch(15% 0.09 85)", "oklch(25% 0.09 85)", "oklch(35% 0.09 85)", "oklch(45% 0.09 85)", "oklch(55% 0.09 85)", "oklch(65% 0.09 85)", "oklch(75% 0.09 85)", "oklch(95% 0.09 85)"] },
+      "night-ground": { "role": "neutral", "displayName": "Midnight Indigo Ground", "canonical": "#181725", "tonalRamp": ["oklch(15% 0.02 285)", "oklch(25% 0.02 285)", "oklch(35% 0.02 285)", "oklch(45% 0.02 285)", "oklch(55% 0.02 285)", "oklch(65% 0.02 285)", "oklch(75% 0.02 285)", "oklch(95% 0.02 285)"] },
+      "night-surface": { "role": "neutral", "displayName": "Night Surface", "canonical": "#242237", "tonalRamp": ["oklch(15% 0.025 285)", "oklch(25% 0.025 285)", "oklch(35% 0.025 285)", "oklch(45% 0.025 285)", "oklch(55% 0.025 285)", "oklch(65% 0.025 285)", "oklch(75% 0.025 285)", "oklch(95% 0.025 285)"] },
+      "night-raised": { "role": "neutral", "displayName": "Raised Night Paper", "canonical": "#302d46", "tonalRamp": ["oklch(15% 0.035 285)", "oklch(25% 0.035 285)", "oklch(35% 0.035 285)", "oklch(45% 0.035 285)", "oklch(55% 0.035 285)", "oklch(65% 0.035 285)", "oklch(75% 0.035 285)", "oklch(95% 0.035 285)"] },
+      "night-border": { "role": "neutral", "displayName": "Night Rule", "canonical": "#57536d", "tonalRamp": ["oklch(15% 0.025 285)", "oklch(25% 0.025 285)", "oklch(35% 0.025 285)", "oklch(45% 0.025 285)", "oklch(55% 0.025 285)", "oklch(65% 0.025 285)", "oklch(75% 0.025 285)", "oklch(95% 0.025 285)"] },
+      "night-text": { "role": "neutral", "displayName": "Warm Night Text", "canonical": "#f4ede0", "tonalRamp": ["oklch(15% 0.025 80)", "oklch(25% 0.025 80)", "oklch(35% 0.025 80)", "oklch(45% 0.025 80)", "oklch(55% 0.025 80)", "oklch(65% 0.025 80)", "oklch(75% 0.025 80)", "oklch(95% 0.025 80)"] },
+      "night-muted": { "role": "neutral", "displayName": "Muted Night Text", "canonical": "#c8c0d0", "tonalRamp": ["oklch(15% 0.025 285)", "oklch(25% 0.025 285)", "oklch(35% 0.025 285)", "oklch(45% 0.025 285)", "oklch(55% 0.025 285)", "oklch(65% 0.025 285)", "oklch(75% 0.025 285)", "oklch(95% 0.025 285)"] },
+      "night-indigo": { "role": "primary", "displayName": "Night Lilac Indigo", "canonical": "#c2b9eb", "tonalRamp": ["oklch(15% 0.075 285)", "oklch(25% 0.075 285)", "oklch(35% 0.075 285)", "oklch(45% 0.075 285)", "oklch(55% 0.075 285)", "oklch(65% 0.075 285)", "oklch(75% 0.075 285)", "oklch(95% 0.075 285)"] },
+      "night-terracotta": { "role": "secondary", "displayName": "Night Clay", "canonical": "#ef9879", "tonalRamp": ["oklch(15% 0.12 35)", "oklch(25% 0.12 35)", "oklch(35% 0.12 35)", "oklch(45% 0.12 35)", "oklch(55% 0.12 35)", "oklch(65% 0.12 35)", "oklch(75% 0.12 35)", "oklch(95% 0.12 35)"] },
+      "night-gold": { "role": "tertiary", "displayName": "Night Gold", "canonical": "#e7c77f", "tonalRamp": ["oklch(15% 0.09 85)", "oklch(25% 0.09 85)", "oklch(35% 0.09 85)", "oklch(45% 0.09 85)", "oklch(55% 0.09 85)", "oklch(65% 0.09 85)", "oklch(75% 0.09 85)", "oklch(95% 0.09 85)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Fraunces", "purpose": "Hero and section headings." },
+      "body": { "displayName": "Instrument Sans", "purpose": "Readable descriptions and content." },
+      "label": { "displayName": "IBM Plex Mono", "purpose": "Dates, categories, and concise metadata." }
+    },
+    "shadows": [
+      { "name": "portrait-paper-offset", "value": "0.7rem 0.7rem 0 #765915, 1.4rem 1.4rem 0 #373260", "purpose": "Hard-offset layers behind the arch portrait." }
+    ],
+    "motion": [
+      { "name": "button-lift", "value": "transform 160ms ease", "purpose": "Small upward response on pointer hover." },
+      { "name": "color-state", "value": "background-color 180ms ease, color 180ms ease", "purpose": "Navigation and theme-control color changes." }
+    ],
+    "breakpoints": [
+      { "name": "navigation-wrap", "value": "66rem" },
+      { "name": "tablet", "value": "48rem" },
+      { "name": "mobile", "value": "35rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "High-priority route or contact action.",
+      "html": "<a class=\"ds-button\" href=\"#contact\">Contact</a>",
+      "css": ".ds-button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; padding: 0.75rem 1rem; border: 1px solid var(--color-indigo); background: var(--color-button-bg); color: var(--color-button-text); font: inherit; font-weight: 600; text-decoration: none; transition: transform 160ms ease, background-color 160ms ease, color 160ms ease; } .ds-button:hover { transform: translateY(-2px); background: var(--color-terracotta); border-color: var(--color-terracotta); color: var(--color-bg); } .ds-button:focus-visible { outline: 2px solid var(--color-terracotta); outline-offset: 3px; }"
+    },
+    {
+      "name": "Secondary Action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A lower-priority action that remains directly on the page.",
+      "html": "<a class=\"ds-button-secondary\" href=\"#projects\">View projects</a>",
+      "css": ".ds-button-secondary { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; padding: 0.75rem 1rem; border: 1px solid var(--color-indigo); background: transparent; color: var(--color-text); font: inherit; font-weight: 600; text-decoration: none; transition: background-color 160ms ease, color 160ms ease; } .ds-button-secondary:hover { background: var(--color-surface-alt); color: var(--color-text); } .ds-button-secondary:focus-visible { outline: 2px solid var(--color-terracotta); outline-offset: 3px; }"
+    },
+    {
+      "name": "Section Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "In-page route links with a thin active-location marker.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Sections\"><a href=\"#education\" aria-current=\"location\">Education</a><a href=\"#projects\">Projects</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 0.15rem; } .ds-nav a { display: inline-flex; min-height: 44px; align-items: center; padding: 0.5rem 0.55rem; color: var(--color-text-muted); font-size: 0.875rem; text-decoration: none; } .ds-nav a:hover { color: var(--color-terracotta); } .ds-nav a[aria-current='location'] { box-shadow: inset 0 -2px var(--color-terracotta); color: var(--color-text); font-weight: 600; } .ds-nav a:focus-visible { outline: 2px solid var(--color-terracotta); outline-offset: 3px; }"
+    },
+    {
+      "name": "Skill Tag",
+      "kind": "chip",
+      "refersTo": "skill-chip",
+      "description": "A non-interactive skill label.",
+      "html": "<span class=\"ds-chip\">Data science</span>",
+      "css": ".ds-chip { display: inline-flex; min-height: 42px; align-items: center; padding: 0.45rem 0.8rem; border: 1px solid var(--color-border); background: var(--color-chip-bg); color: var(--color-text); font: inherit; }"
+    },
+    {
+      "name": "Project Ledger Entry",
+      "kind": "card",
+      "refersTo": "project-entry",
+      "description": "An open, square-edged project record with a fine ruled top.",
+      "html": "<article class=\"ds-project\"><p class=\"ds-kind\">Project</p><h3>Project title</h3><p>Short, verified project description.</p></article>",
+      "css": ".ds-project { min-height: 15rem; padding: 1.5rem; border-top: 1px solid var(--color-border); border-right: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); } .ds-project h3 { margin: 1rem 0 0; color: var(--color-indigo); font: 400 clamp(1.5rem, 3vw, 2.5rem)/1.15 'Fraunces', Georgia, serif; } .ds-project p:last-child { max-width: 38ch; color: var(--color-text-muted); } .ds-kind { color: var(--color-terracotta); font: 0.75rem/1.5 'IBM Plex Mono', monospace; letter-spacing: 0.045em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Arch Portrait Frame",
+      "kind": "custom",
+      "refersTo": "portrait-frame",
+      "description": "Optional portrait silhouette with offset paper planes.",
+      "html": "<div class=\"ds-arch\"><span>Portrait slot</span></div>",
+      "css": ".ds-arch { display: grid; width: min(100%, 18rem); aspect-ratio: 0.78; place-items: center; overflow: hidden; border: 1px solid var(--color-indigo); border-radius: 50% 50% 0 0; background: var(--color-terracotta); box-shadow: 0.7rem 0.7rem 0 var(--color-gold), 1.4rem 1.4rem 0 var(--color-indigo); color: var(--color-surface); font: 0.875rem 'IBM Plex Mono', monospace; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Layered Paper-Cut Atlas",
+    "overview": "The portfolio treats an academic and project history as a route through a carefully assembled paper atlas. Broad fields of indigo and terracotta carry the major records; warm paper, ruled ledgers, and gold details give the page the tactile rhythm of a composed editorial object. Khatam-star cuts recur as a geometric signature, while the arch portrait frame leaves a clear, optional place for a real portrait.\n\nThe interface stays direct and readable across English, French, and Simplified Chinese. A paired dark palette preserves the same hierarchy rather than inverting it mechanically. Repeated records use open, square-edged structures instead of generic rounded-card UI.",
+    "keyCharacteristics": [
+      "Full palette of paper neutrals, indigo, terracotta, and gold, with a coordinated dark theme.",
+      "Fraunces display, Instrument Sans reading text, and IBM Plex Mono annotations.",
+      "Khatam geometry, arch framing, clipped color fields, and fine ledger rules.",
+      "Information is organized as a connected route, not a stack of anonymous cards."
+    ],
+    "rules": [
+      { "name": "The Three-Ink Rule", "body": "Let indigo carry the large structural fields, terracotta mark emphasis, and gold annotate; do not scatter the accents without a role.", "section": "colors" },
+      { "name": "The Role-Bound Type Rule", "body": "Use the serif for display hierarchy, sans serif for reading, and mono only where the content behaves like a label or measurement.", "section": "typography" },
+      { "name": "The Paper-Plane Rule", "body": "Use tonal fields and borders for structure; reserve offset shadow geometry for the portrait artwork.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use the paired light and dark tokens so contrast and hierarchy survive theme changes.",
+      "Do use khatam geometry, paper planes, and ledger rules as recurring structural motifs.",
+      "Do preserve the open, responsive editorial layout and generous section rhythm."
+    ],
+    "donts": [
+      "Don't soften record surfaces into generic rounded-card grids.",
+      "Don't use gold as a body-text color or mono as a display face.",
+      "Don't replace the optional portrait slot with invented or stock personal imagery."
+    ]
+  }
+}

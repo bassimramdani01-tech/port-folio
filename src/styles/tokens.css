@@ -1,24 +1,65 @@
 :root {
-  --color-bg: #0a0f1a;
-  --color-surface: #101827;
-  --color-surface-alt: #16202f;
-  --color-border: #223047;
-  --color-text: #e8edf5;
-  --color-text-muted: #9aa8bf;
-  --color-accent: #2dd4bf;
-  --color-accent-hover: #5eead4;
+  color-scheme: light;
+  --color-bg: #f3ede1;
+  --color-surface: #fbf7ef;
+  --color-surface-alt: #e7dcc8;
+  --color-border: #b6a88f;
+  --color-text: #292642;
+  --color-text-muted: #57546a;
+  --color-indigo: #373260;
+  --color-terracotta: #97462f;
+  --color-gold: #765915;
+  --color-link: #373260;
+  --color-link-hover: #97462f;
+  --color-button-bg: #373260;
+  --color-button-text: #fbf7ef;
+  --color-chip-bg: #e7dcc8;
+  --color-shadow: rgb(41 38 66 / 14%);
+  --color-on-indigo: #fbf7ef;
+  --color-muted-on-indigo: #e7e0f1;
+  --color-gold-on-indigo: #e6c46e;
+  --color-on-terracotta: #fbf7ef;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Instrument Sans', 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
 
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.5rem;
-  --font-size-2xl: 2rem;
-  --font-size-3xl: 2.75rem;
+  --font-size-2xl: clamp(2rem, 3.2vw, 2.8rem);
+  --font-size-3xl: clamp(3rem, 8vw, 6rem);
 
   --space-2: 0.5rem;
   --space-4: 1rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-12: 3rem;
   --space-16: 4rem;
   --space-24: 6rem;
+  --space-32: 8rem;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: #181725;
+  --color-surface: #242237;
+  --color-surface-alt: #302d46;
+  --color-border: #57536d;
+  --color-text: #f4ede0;
+  --color-text-muted: #c8c0d0;
+  --color-indigo: #c2b9eb;
+  --color-terracotta: #ef9879;
+  --color-gold: #e7c77f;
+  --color-link: #e7c77f;
+  --color-link-hover: #f4ede0;
+  --color-button-bg: #e7c77f;
+  --color-button-text: #242237;
+  --color-chip-bg: #302d46;
+  --color-shadow: rgb(0 0 0 / 28%);
+  --color-on-indigo: #242237;
+  --color-muted-on-indigo: #373260;
+  --color-gold-on-indigo: #373260;
+  --color-on-terracotta: #181725;
 }

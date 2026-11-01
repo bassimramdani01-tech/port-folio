@@ -1,0 +1,17 @@
+{
+  "name": "Bassim Ramdani — Portfolio",
+  "short_name": "Bassim",
+  "description": "Portfolio of Bassim Ramdani, focused on AI engineering and data science.",
+  "start_url": "./en/",
+  "display": "standalone",
+  "background_color": "#f3ede1",
+  "theme_color": "#f3ede1",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

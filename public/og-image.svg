@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Bassim Ramdani</title>
+  <desc id="description">AI Engineering and Data Science — a Moroccan portfolio in layered paper shapes.</desc>
+  <rect width="1200" height="630" fill="#f3ede1"/>
+  <path d="M0 0h1200v630H0z" fill="#fbf7ef"/>
+  <path d="M825 0h375v630H825z" fill="#373260"/>
+  <path d="m1010 42 30 88 95-33-33 95 88 30-88 30 33 95-95-33-30 88-30-88-95 33 33-95-88-30 88-30-33-95 95 33z" fill="#e6c46e"/>
+  <path d="M956 206a104 104 0 0 1 208 0v277H956z" fill="#97462f"/>
+  <path d="m1060 271 18 48 52 18-52 18-18 48-18-48-52-18 52-18z" fill="#e6c46e"/>
+  <path d="M73 536h680" stroke="#b6a88f" stroke-width="2" stroke-dasharray="3 12"/>
+  <path d="M73 536h530" stroke="#97462f" stroke-width="3"/>
+  <circle cx="73" cy="536" r="8" fill="#373260"/>
+  <circle cx="603" cy="536" r="8" fill="#373260"/>
+  <text x="74" y="106" fill="#765915" font-family="monospace" font-size="20" letter-spacing="3">MOROCCO · AI ENGINEERING · DATA SCIENCE</text>
+  <text x="68" y="256" fill="#292642" font-family="Georgia, serif" font-size="90" letter-spacing="-3">Bassim</text>
+  <text x="68" y="355" fill="#292642" font-family="Georgia, serif" font-size="90" letter-spacing="-3">Ramdani</text>
+  <text x="74" y="433" fill="#97462f" font-family="Arial, sans-serif" font-size="30">AI Engineering and Data Science</text>
+  <text x="74" y="584" fill="#57546a" font-family="monospace" font-size="16" letter-spacing="2">A MOROCCAN PATH THROUGH DATA, NETWORKS &amp; LANGUAGE MODELS</text>
+</svg>

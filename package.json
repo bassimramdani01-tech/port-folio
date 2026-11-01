@@ -11,7 +11,9 @@
     "check": "astro check",
     "build": "astro build",
     "preview": "astro preview",
-    "check:placeholders": "node scripts/check-placeholders.mjs"
+    "check:placeholders": "node scripts/check-placeholders.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "verify": "npm run check && npm run check:contrast && npm run build && npm run check:placeholders"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",

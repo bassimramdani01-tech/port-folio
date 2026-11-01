@@ -27,6 +27,7 @@ const alternateLocales = indexable && Astro.site
     }))
   : [];
 const defaultLocaleUrl = alternateLocales.find((item) => item.code === 'en')?.url;
+const openGraphImage = Astro.site ? new URL(url('og-image.png'), Astro.site).href : undefined;
 ---
 
 <!doctype html>
@@ -34,7 +35,7 @@ const defaultLocaleUrl = alternateLocales.find((item) => item.code === 'en')?.ur
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light dark" />
     {description && <meta name="description" content={description} />}
     {!indexable && <meta name="robots" content="noindex,follow" />}
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
@@ -51,10 +52,29 @@ const defaultLocaleUrl = alternateLocales.find((item) => item.code === 'en')?.ur
       .filter((alternate) => alternate.code !== locale)
       .map((alternate) => <meta property="og:locale:alternate" content={alternate.openGraphLocale} />)}
     {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
-    <meta name="twitter:card" content="summary" />
+    {openGraphImage && <meta property="og:image" content={openGraphImage} />}
+    {openGraphImage && <meta property="og:image:type" content="image/png" />}
+    {openGraphImage && <meta property="og:image:width" content="1200" />}
+    {openGraphImage && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <link rel="icon" type="image/svg+xml" sizes="any" href={url('app-icon.svg')} />
+    <link rel="manifest" href={url('site.webmanifest')} />
+    <meta name="theme-color" content="#f5efe4" />
+    <script is:inline>
+      try {
+        const savedTheme = localStorage.getItem('portfolio-theme');
+        const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = savedTheme === 'light' || savedTheme === 'dark'
+          ? savedTheme
+          : preferredTheme;
+      } catch {
+        document.documentElement.dataset.theme =
+          window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    </script>
     <title>{title}</title>
   </head>
   <body>

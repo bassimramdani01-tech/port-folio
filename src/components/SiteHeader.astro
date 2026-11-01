@@ -14,11 +14,15 @@ interface Props {
   languageNames: Record<LocalePath, string>;
   name: string;
   sections: { id: string; label: string }[];
+  themeLabel: string;
+  lightThemeLabel: string;
+  darkThemeLabel: string;
 }
 
 const {
   locale, homeLabel, skipLabel, navLabel, menuLabel, closeMenuLabel,
-  languageLabel, languageNames, name, sections,
+  languageLabel, languageNames, name, sections, themeLabel,
+  lightThemeLabel, darkThemeLabel,
 } = Astro.props;
 ---
 
@@ -26,7 +30,7 @@ const {
 <header class="site-header">
   <div class="header-inner">
     <a class="site-brand" href={url(`${locale}/`)} aria-label={homeLabel}>
-      <span class="brand-mark" aria-hidden="true">BR</span>
+      <span class="brand-mark" aria-hidden="true"></span>
       <span>{name}</span>
     </a>
     <button
@@ -46,6 +50,16 @@ const {
       {sections.map((section) => <a href={`#${section.id}`}>{section.label}</a>)}
     </nav>
     <LanguageSwitcher locale={locale} label={languageLabel} names={languageNames} />
+    <button
+      class="theme-toggle"
+      type="button"
+      aria-label={themeLabel}
+      data-theme-toggle
+      data-light-label={lightThemeLabel}
+      data-dark-label={darkThemeLabel}
+    >
+      <span aria-hidden="true">◐</span>
+    </button>
   </div>
 </header>
 
@@ -54,7 +68,7 @@ const {
   const navigation = document.querySelector<HTMLElement>('[data-primary-navigation]');
 
   if (menuButton && navigation) {
-    const narrowScreen = window.matchMedia('(max-width: 52rem)');
+    const narrowScreen = window.matchMedia('(max-width: 66rem)');
     const menuIcon = menuButton.querySelector<HTMLElement>('[aria-hidden="true"]');
     const sectionLinks = Array.from(navigation.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
     const sectionIds = sectionLinks.map((link) => link.hash.slice(1));
@@ -154,5 +168,32 @@ const {
     } else {
       updateCurrentSection();
     }
+  }
+</script>
+
+<script>
+  const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+
+  if (themeButton) {
+    const icon = themeButton.querySelector<HTMLElement>('[aria-hidden="true"]');
+    const setTheme = (theme: 'light' | 'dark', persist = false) => {
+      document.documentElement.dataset.theme = theme;
+      themeButton.setAttribute(
+        'aria-label',
+        theme === 'light' ? themeButton.dataset.darkLabel ?? '' : themeButton.dataset.lightLabel ?? '',
+      );
+      if (icon) icon.textContent = theme === 'light' ? '☾' : '☼';
+      if (persist) {
+        try {
+          localStorage.setItem('portfolio-theme', theme);
+        } catch (error) {
+          console.warn('Theme preference could not be saved.', error);
+        }
+      }
+    };
+
+    themeButton.addEventListener('click', () => {
+      setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark', true);
+    });
   }
 </script>

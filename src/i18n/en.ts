@@ -13,7 +13,7 @@ export const en = {
     closeNavigation: 'Close navigation menu',
     chooseLanguage: 'Choose language',
     externalLink: 'Opens in a new tab',
-    formErrors: 'Please correct the errors in the form.',
+    themeToggle: 'Change color theme',
   },
   header: {
     homeLink: 'Bassim Ramdani home',
@@ -25,8 +25,7 @@ export const en = {
     education: 'Education',
     internships: 'Internships',
     researchProjects: 'Research & projects',
-    skillsInterests: 'Skills & interests',
-    certificates: 'Certificates',
+    skillsInterests: 'Skills',
     languages: 'Languages',
     contact: 'Contact',
   },
@@ -39,83 +38,61 @@ export const en = {
     },
   },
   hero: {
-    eyebrow: 'Portfolio',
+    title: 'Bassim Ramdani',
+    location: 'Essaouira · Morocco',
     field: 'AI Engineering and Data Science',
-    goalLabel: 'Graduate study goal',
-    goal: 'Master’s study at a leading university in China',
-    contactAction: 'Get in touch',
+    summary: 'A Moroccan path through data, networks, and language models.',
+    portraitNote: 'Portrait space',
+    highlightsAction: 'See the highlights',
+    fullStoryAction: 'Follow the full story',
+    contactAction: 'Write to me',
     cvAction: 'Download CV',
   },
   about: {
     title: 'About',
     paragraphs: {
       background:
-        'My background is in AI Engineering and Data Science. I completed a three-year program at École Supérieure de Technologie (EST).',
+        'I studied AI engineering and data science at EST Essaouira, completing a Bachelor in 3IASD and a DUT in IDSD.',
       experience:
-        'During internships, I worked on a network architecture project, database cleaning, data visualizations, and frontend and backend development for an official website.',
+        'My internships at OCP Group and TAQA Morocco brought together network architecture, SQL, and Power BI.',
       researchDirection:
-        'I am preparing for master’s study at a leading university in China. I hope to explore AI agent architecture, building AI agents, prompt engineering, NLP, and data engineering, and to develop a research direction through graduate study.',
+        'My projects include necto, NetGuard, and a capstone exploring large language models for malware analysis.',
     },
   },
   education: {
     title: 'Education',
-    labels: {
-      institution: 'Institution',
-      location: 'Location',
-      program: 'Program',
-      field: 'Field',
-      completion: 'Completion',
-      overallGrade: 'Overall grade',
-      finalProjectRanking: 'Final project ranking',
-      officialDegreeTitle: 'Official degree title',
-      toConfirm: 'To confirm',
+    records: {
+      'bachelor-3iasd': 'Bachelor · 3IASD',
+      'dut-idsd': 'DUT · IDSD',
+      'shandong-language-year': 'Chinese-language year',
     },
-    programDuration: '{years}-year program',
-    completionValue: 'Graduated in academic year {year}',
-    gradeValue: 'Approximately {value}/20',
-    finalProjectRankingValue: 'Ranked {rank} of {total} in the final project',
-    locationValue: 'Essaouira, Morocco',
-    firstCohortClaim: 'Part of the first bachelor cohort in Morocco',
   },
   experience: {
     title: 'Internships',
     recordLabel: 'Internship',
     descriptions: {
-      'ocp-group-2024':
-        'Worked on a network architecture project using Cisco Packet Tracer.',
-      'taqa-2025':
-        'Cleaned databases using SQL and created visualizations with Power BI.',
-      'argana-artisan-cooperative-2026':
-        'Worked on frontend and backend development for an official website.',
+      'ocp-group-2024': 'Network architecture with Cisco Packet Tracer.',
+      'taqa-2025': 'Database cleaning with SQL and visualizations with Power BI.',
     },
   },
   researchProjects: {
     title: 'Research & projects',
     capstoneLabel: 'Academic capstone',
-    priorAcademicWork: 'Prior academic work',
+    projectLabel: 'Project',
     descriptions: {
       'ai-antivirus-capstone':
-        'An AI-powered antivirus concept that scans files for malicious content and uses AI to provide diagnostics.',
+        'Capstone project on malware analysis with large language models.',
+    },
+    records: {
+      'ai-antivirus-capstone': 'LLM malware analysis',
+      necto: 'necto',
+      netguard: 'NetGuard',
     },
     projectLink: 'View project',
   },
   skillsInterests: {
-    title: 'Skills & interests',
+    title: 'Skills',
     skillsLabel: 'Skills',
-    interestsLabel: 'Interests',
-    interestNames: {
-      'ai-agent-architecture': 'AI agent architecture',
-      'building-ai-agents': 'Building AI agents',
-      'prompt-engineering': 'Prompt engineering',
-      nlp: 'NLP',
-      'data-engineering': 'Data engineering',
-    },
-  },
-  certificates: {
-    title: 'Certificates',
-    issuerLabel: 'Issuer',
-    dateLabel: 'Date',
-    certificateLink: 'View certificate',
   },
   languages: {
     title: 'Languages',
@@ -124,42 +101,26 @@ export const en = {
       english: 'English',
       chinese: 'Chinese',
     },
-    notes: {
-      english: 'Exam planned, not yet taken',
-      chinese: 'Learning during academic year {year}',
-    },
   },
   socialLinks: {
     label: 'Social links',
     github: 'GitHub',
-    linkedin: 'LinkedIn',
     wechat: 'WeChat',
-    wechatQr: 'WeChat QR code',
   },
   contact: {
     title: 'Contact',
-    introduction:
-      'For questions about my academic background or graduate study interests, you can reach me by email or phone.',
-    emailLabel: 'Email Bassim',
-    phoneLabel: 'Call Bassim',
-    phoneToConfirm: 'Phone number to confirm',
-    fallbackExplanation:
-      'The contact form is not configured. Please contact me directly by email or phone.',
-    form: {
-      nameLabel: 'Name',
-      emailLabel: 'Email address',
-      messageLabel: 'Message',
-      submit: 'Send message',
-      submitting: 'Sending…',
-      success: 'Your message was sent.',
-      failure:
-        'Your message could not be sent. Please try again or contact me by email.',
-      nameRequired: 'Please enter your name.',
-      emailRequired: 'Please enter your email address.',
-      emailInvalid: 'Please enter a valid email address.',
-      messageRequired: 'Please enter a message.',
-      honeypotLabel: 'Leave this field empty',
-    },
+    introduction: 'For academic and project enquiries, reach me through the links below.',
+    emailLabel: 'Email',
+    githubLabel: 'GitHub',
+    wechatLabel: 'WeChat',
+    wechatIdLabel: 'WeChat ID',
+    cvLabel: 'Curriculum vitae',
+    externalLink: 'Opens in a new tab',
+    portraitLabel: 'Portrait of Bassim Ramdani',
+  },
+  theme: {
+    lightLabel: 'Switch to light theme',
+    darkLabel: 'Switch to dark theme',
   },
   footer: {
     backToTop: 'Back to top',
